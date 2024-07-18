@@ -14,6 +14,9 @@ public partial class AppManager : Control
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		var controller_state = GetNode<Label>("controller_state");
+		controller_state.Text = controller.ToString();
+		controller_state.Show();
 		controller.print_controller();
 		// controller.set_axes(0,0,0,0);
 	}
@@ -60,6 +63,9 @@ public class Controller{
 			GD.Print(left_x.ToString("0.##") +  " "  + left_y.ToString("0.##") + " " + right_x.ToString("0.##") + " " + right_y.ToString("0.##"));
 		}
 
+		new public string ToString(){
+			return left_x.ToString("0.##") +  " "  + left_y.ToString("0.##") + " " + right_x.ToString("0.##") + " " + right_y.ToString("0.##");
+		}
 		public void set_axes(float lx , float ly, float rx, float ry){
 			left_x = lx;
 			right_x = rx;

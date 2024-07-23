@@ -1,24 +1,43 @@
 using Godot;
 using System;
 using System.Dynamic;
-
+using System.Threading;
+namespace DeckControl;
 public partial class AppManager : Control
-{
+{	
+	int counter = 0;
 	Controller controller = new Controller();
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		Engine.PhysicsTicksPerSecond = 10000000;
+		Engine.MaxPhysicsStepsPerFrame = 1000;
 		controller.set_axes(0,0,0,0);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		var controller_state = GetNode<Label>("controller_state");
+		counter = 0;
+		var controller_state = GetNode<Label>("/root/Control/controller_state");
 		controller_state.Text = controller.ToString();
 		controller_state.Show();
 		controller.print_controller();
-		// controller.set_axes(0,0,0,0);
+		setUI(20);
+	}
+    public override void _PhysicsProcess(double delta)
+    {
+        GD.Print(counter++);
+    }
+    public void setUI(int scale){
+		var left_joy = GetNode<Sprite2D>("/root/Control/%Left_Joy");
+		var right_joy = GetNode<Sprite2D>("/root/Control/%Right_Joy");
+		
+		left_joy.Offset = new Vector2(controller.left_x * scale, controller.left_y * scale);
+		right_joy.Offset = new Vector2(controller.right_x * scale, controller.right_y * scale);
+
+		left_joy.Show();
+		right_joy.Show();
 	}
 
 	public override void _Input(InputEvent inputEvent)

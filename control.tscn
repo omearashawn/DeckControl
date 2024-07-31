@@ -1,10 +1,19 @@
-[gd_scene load_steps=4 format=3 uid="uid://b00kphdch5fb"]
+[gd_scene load_steps=7 format=3 uid="uid://b00kphdch5fb"]
 
 [ext_resource type="Script" path="res://AppManager.cs" id="1_6j38o"]
 [ext_resource type="Texture2D" uid="uid://b7baircy4dswb" path="res://Assests/thumb_stick.png" id="2_t684b"]
 [ext_resource type="Script" path="res://Network.cs" id="3_ecrl6"]
 
-[node name="Control" type="Control"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e7bad"]
+bg_color = Color(0.672305, 1.76881e-06, 6.257e-07, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qarm4"]
+bg_color = Color(1, 0.447059, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a0opp"]
+bg_color = Color(0, 0.57313, 5.77569e-07, 1)
+
+[node name="Control" type="Control" groups=["rc_group"]]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,6 +21,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_6j38o")
+metadata/_edit_horizontal_guides_ = [-67.0]
 
 [node name="controller_state" type="Label" parent="."]
 unique_name_in_owner = true
@@ -22,17 +32,80 @@ text = "Controller_state"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Left_Joy" type="Sprite2D" parent="."]
+[node name="Left_Joy" type="Sprite2D" parent="controller_state"]
 unique_name_in_owner = true
+light_mask = 2
+visibility_layer = 2
+z_index = 1
 position = Vector2(320, 400)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_t684b")
 
-[node name="Right_Joy" type="Sprite2D" parent="."]
+[node name="Right_Joy" type="Sprite2D" parent="controller_state"]
 unique_name_in_owner = true
+z_index = 1
+position = Vector2(960, 400)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_t684b")
+
+[node name="Left_Joy_tansparent" type="Sprite2D" parent="controller_state"]
+modulate = Color(1, 1, 1, 0.117647)
+position = Vector2(320, 400)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_t684b")
+
+[node name="Right_Joy_transparent" type="Sprite2D" parent="controller_state"]
+modulate = Color(1, 1, 1, 0.117647)
 position = Vector2(960, 400)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_t684b")
 
 [node name="Network" type="Node" parent="."]
 script = ExtResource("3_ecrl6")
+
+[node name="Engine_slider" type="HSlider" parent="."]
+layout_mode = 0
+offset_left = 856.0
+offset_top = 135.0
+offset_right = 1066.0
+offset_bottom = 237.0
+scrollable = false
+
+[node name="Engine_label" type="Label" parent="Engine_slider"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 31.0
+offset_top = 4.0
+offset_right = 179.0
+offset_bottom = 27.0
+text = "Engine Speed =  0%
+"
+
+[node name="Operate_button" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 300.0
+offset_top = 156.0
+offset_right = 372.0
+offset_bottom = 187.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_e7bad")
+theme_override_styles/hover = SubResource("StyleBoxFlat_qarm4")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_a0opp")
+toggle_mode = true
+action_mode = 0
+text = "Operate"
+
+[node name="Horn_button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 164.0
+offset_top = 76.0
+offset_right = 172.0
+offset_bottom = 84.0
+action_mode = 0
+text = "Horn
+"
+
+[connection signal="value_changed" from="Engine_slider" to="." method="_on_engine_slider_value_changed"]
+[connection signal="toggled" from="Operate_button" to="." method="_on_option_button_toggled"]
+[connection signal="button_down" from="Horn_button" to="." method="_on_horn_button_button_down"]
+[connection signal="button_up" from="Horn_button" to="." method="_on_horn_button_button_up"]

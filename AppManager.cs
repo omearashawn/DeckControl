@@ -63,13 +63,18 @@ public partial class AppManager : Control
 				// GD.Print("Unmapped axis: " + joystick.AsText());
 			}
 		}
+		else if(inputEvent is InputEventJoypadButton button){
+			if(button.IsAction("engine_crank")){
+				controller_global.Instance.engine_crank = button.IsPressed();
+			}
+		}
 	}
 	public void _on_engine_slider_value_changed(float value){
-		controller_global.Instance.engineSpeed = value;
-		GetNode<Label>("%Engine_label").Text = "Engine Speed = " + controller_global.Instance.engineSpeed.ToString() + "%";
+		controller_global.Instance.engineSpeed = value/100;
+		GetNode<Label>("%Engine_label").Text = "Engine Speed = " + (controller_global.Instance.engineSpeed*100).ToString() + "%";
 	}
 	public void _on_option_button_toggled(bool state){
-		var button = GetNode<Button>("%Operate_button");
+		// var button = GetNode<Button>("%Operate_button");
 		controller_global.Instance.operate = state;
 		GD.Print(state);
 	}
@@ -79,4 +84,9 @@ public partial class AppManager : Control
 	public void _on_horn_button_button_up(){
 		controller_global.Instance.horn = false;
 	}
+	public void _on_stop_button_toggled(bool state){
+		controller_global.Instance.stop = state;
+		GD.Print(state);
+	}
 }
+

@@ -105,7 +105,17 @@ action_mode = 0
 text = "Horn
 "
 
+[node name="Stop_button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 618.0
+offset_top = 180.0
+offset_right = 667.0
+offset_bottom = 211.0
+toggle_mode = true
+text = "STOP"
+
 [connection signal="value_changed" from="Engine_slider" to="." method="_on_engine_slider_value_changed"]
 [connection signal="toggled" from="Operate_button" to="." method="_on_option_button_toggled"]
 [connection signal="button_down" from="Horn_button" to="." method="_on_horn_button_button_down"]
 [connection signal="button_up" from="Horn_button" to="." method="_on_horn_button_button_up"]
+[connection signal="toggled" from="Stop_button" to="." method="_on_stop_button_toggled"]

@@ -16,7 +16,7 @@ using System.Collections;
 
 public partial class Network : Node
 {
-	Byte[] packet = new Byte[31];
+	Byte[] packet = new Byte[30];
 	Socket s; 
 	const int PORT =8080;
 	// const string IP = "192.168.1.255";
@@ -45,7 +45,6 @@ public partial class Network : Node
 
 	public Byte[] packetBuilder(){
 		Byte [] time_bytes = BitConverter.GetBytes(Time.GetUnixTimeFromSystem()); //UTC time in sec. 8 bytes
-		GD.Print(Time.GetUnixTimeFromSystem());
 		// time_bytes.Reverse();  <- reversing doesn't change outcome at server side?
 		Byte[] lx_bytes = BitConverter.GetBytes(controller_global.Instance.left_x); //4 bytes
 		Byte[] ly_bytes = BitConverter.GetBytes(controller_global.Instance.left_y);
@@ -65,9 +64,9 @@ public partial class Network : Node
 		pos += lx_bytes.Length;
 		Buffer.BlockCopy(ly_bytes, 0, packet, pos, 4);
 		pos += ly_bytes.Length;
-		Buffer.BlockCopy(lx_bytes, 0, packet, pos, 4);
+		Buffer.BlockCopy(rx_bytes, 0, packet, pos, 4);
 		pos += rx_bytes.Length;
-		Buffer.BlockCopy(lx_bytes, 0, packet, pos, 4);
+		Buffer.BlockCopy(ry_bytes, 0, packet, pos, 4);
 		pos += ry_bytes.Length;
 		packet[pos] = state_byte;
 		return packet;
@@ -77,6 +76,8 @@ public partial class Network : Node
 		BitArray b = new BitArray(8, false);
 		b[0] = controller_global.Instance.operate;
 		b[1] = controller_global.Instance.horn;
+		b[3] = controller_global.Instance.engine_crank;
+		b[4] = controller_global.Instance.stop;
 		byte[] bytes = new byte[1];
     	b.CopyTo(bytes, 0);
     	return bytes[0];

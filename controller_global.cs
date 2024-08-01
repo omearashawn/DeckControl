@@ -13,6 +13,9 @@ public partial class controller_global : Node
 	public bool operate = false;
 	public bool horn = false;
 
+	public bool engine_crank = false;
+	public bool stop = false;
+
 	public void print_controller(){
 		GD.Print(left_x.ToString("0.##") +  " "  + left_y.ToString("0.##") + " " + right_x.ToString("0.##") + " " + right_y.ToString("0.##"));
 	}

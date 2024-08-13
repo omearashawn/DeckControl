@@ -1,8 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://b00kphdch5fb"]
+[gd_scene load_steps=8 format=3 uid="uid://b00kphdch5fb"]
 
 [ext_resource type="Script" path="res://AppManager.cs" id="1_6j38o"]
 [ext_resource type="Texture2D" uid="uid://b7baircy4dswb" path="res://Assests/thumb_stick.png" id="2_t684b"]
 [ext_resource type="Script" path="res://Network.cs" id="3_ecrl6"]
+
+[sub_resource type="Theme" id="Theme_4hfot"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e7bad"]
 bg_color = Color(0.672305, 1.76881e-06, 6.257e-07, 1)
@@ -20,14 +22,30 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = SubResource("Theme_4hfot")
 script = ExtResource("1_6j38o")
 metadata/_edit_horizontal_guides_ = [-67.0]
+
+[node name="modeSwitch" type="CheckButton" parent="."]
+top_level = true
+light_mask = 512
+visibility_layer = 512
+z_index = 11
+z_as_relative = false
+layout_mode = 0
+offset_right = 44.0
+offset_bottom = 24.0
+scale = Vector2(1.36, 1.36)
+flat = true
+icon_alignment = 1
+expand_icon = true
 
 [node name="controller_state" type="Label" parent="."]
 unique_name_in_owner = true
 layout_mode = 0
+offset_top = -116.0
 offset_right = 1280.0
-offset_bottom = 800.0
+offset_bottom = 684.0
 text = "Controller_state"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -36,14 +54,12 @@ vertical_alignment = 1
 unique_name_in_owner = true
 light_mask = 2
 visibility_layer = 2
-z_index = 1
 position = Vector2(320, 400)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_t684b")
 
 [node name="Right_Joy" type="Sprite2D" parent="controller_state"]
 unique_name_in_owner = true
-z_index = 1
 position = Vector2(960, 400)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("2_t684b")
@@ -101,6 +117,8 @@ offset_left = 164.0
 offset_top = 76.0
 offset_right = 172.0
 offset_bottom = 84.0
+theme_override_constants/outline_size = 0
+theme_override_constants/icon_max_width = 0
 action_mode = 0
 text = "Horn
 "
@@ -114,6 +132,18 @@ offset_bottom = 211.0
 toggle_mode = true
 text = "STOP"
 
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = -2
+layout_mode = 0
+offset_left = 1.0
+offset_right = 1282.0
+offset_bottom = 800.0
+scale = Vector2(0.998124, 1.00029)
+mouse_filter = 2
+color = Color(0.67069, 0.67069, 0.67069, 1)
+metadata/_edit_lock_ = true
+
+[connection signal="toggled" from="modeSwitch" to="." method="_on_mode_switch_toggled"]
 [connection signal="value_changed" from="Engine_slider" to="." method="_on_engine_slider_value_changed"]
 [connection signal="toggled" from="Operate_button" to="." method="_on_option_button_toggled"]
 [connection signal="button_down" from="Horn_button" to="." method="_on_horn_button_button_down"]

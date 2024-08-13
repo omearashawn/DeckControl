@@ -6,8 +6,11 @@ namespace DeckControl;
 public partial class AppManager : Control
 {	
 	// Called when the node enters the scene tree for the first time.
+	Node map_node;
 	public override void _Ready()
 	{
+		// Input.MouseMode = Input.MouseModeEnum.Hidden;
+		map_node = ResourceLoader.Load<PackedScene>("res://map_node.tscn").Instantiate();
 		Engine.PhysicsTicksPerSecond = 1000;
 		Engine.MaxPhysicsStepsPerFrame = 30;
 		controller_global.Instance.set_axes(0,0,0,0);
@@ -74,9 +77,7 @@ public partial class AppManager : Control
 		GetNode<Label>("%Engine_label").Text = "Engine Speed = " + (controller_global.Instance.engineSpeed*100).ToString() + "%";
 	}
 	public void _on_option_button_toggled(bool state){
-		// var button = GetNode<Button>("%Operate_button");
 		controller_global.Instance.operate = state;
-		GD.Print(state);
 	}
 	public void _on_horn_button_button_down(){
 		controller_global.Instance.horn = true;
@@ -86,7 +87,14 @@ public partial class AppManager : Control
 	}
 	public void _on_stop_button_toggled(bool state){
 		controller_global.Instance.stop = state;
-		GD.Print(state);
 	}
+
+	public void _on_mode_switch_toggled(bool state){
+		if(state){
+			AddChild(map_node);
+		}else{
+			RemoveChild(map_node);
+		}
+	}	
 }
 

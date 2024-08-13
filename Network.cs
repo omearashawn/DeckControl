@@ -19,8 +19,8 @@ public partial class Network : Node
 	Byte[] packet = new Byte[30];
 	Socket s; 
 	const int PORT =8080;
-	// const string IP = "192.168.1.255";
-	const string IP = "172.20.228.255";
+	const string IP = "192.168.2.1";
+	// const string IP = "172.20.228.255";
 	// const string IP = "127.0.0.1";
 	IPEndPoint endPoint;
 	public override void _Ready()

@@ -1,19 +1,37 @@
-[gd_scene load_steps=8 format=3 uid="uid://b00kphdch5fb"]
+[gd_scene load_steps=18 format=3 uid="uid://b00kphdch5fb"]
 
 [ext_resource type="Script" path="res://AppManager.cs" id="1_6j38o"]
+[ext_resource type="Theme" uid="uid://iv8almocltjk" path="res://MC_theme.tres" id="2_5ky3x"]
+[ext_resource type="Texture2D" uid="uid://cphxheorsuqb8" path="res://Assests/right_controller_pad.png" id="2_n7rny"]
 [ext_resource type="Texture2D" uid="uid://b7baircy4dswb" path="res://Assests/thumb_stick.png" id="2_t684b"]
+[ext_resource type="Texture2D" uid="uid://cjulmq1hmcpg6" path="res://Assests/left_controller_pad.png" id="3_d4b4f"]
 [ext_resource type="Script" path="res://Network.cs" id="3_ecrl6"]
+[ext_resource type="Texture2D" uid="uid://d082o2x6uj22j" path="res://Assests/mc_thumb.png" id="4_2nj75"]
+[ext_resource type="Texture2D" uid="uid://bkth0thgb461l" path="res://Assests/UI/horn_off.png" id="4_4n477"]
+[ext_resource type="Texture2D" uid="uid://ctlonlvky7wor" path="res://Assests/UI/horn_on.png" id="5_pn58x"]
 
 [sub_resource type="Theme" id="Theme_4hfot"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e7bad"]
 bg_color = Color(0.672305, 1.76881e-06, 6.257e-07, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qarm4"]
-bg_color = Color(1, 0.447059, 0, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tdwtv"]
+bg_color = Color(0.670588, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a0opp"]
 bg_color = Color(0, 0.57313, 5.77569e-07, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_klgb6"]
+texture = ExtResource("4_4n477")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2f5wj"]
+texture = ExtResource("4_4n477")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_q0ml2"]
+texture = ExtResource("5_pn58x")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4fhl4"]
+bg_color = Color(1, 0, 0.0431373, 1)
 
 [node name="Control" type="Control" groups=["rc_group"]]
 layout_mode = 3
@@ -27,64 +45,43 @@ script = ExtResource("1_6j38o")
 metadata/_edit_horizontal_guides_ = [-67.0]
 
 [node name="modeSwitch" type="CheckButton" parent="."]
+process_mode = 3
+process_priority = -4
 top_level = true
 light_mask = 512
 visibility_layer = 512
 z_index = 11
 z_as_relative = false
 layout_mode = 0
-offset_right = 44.0
-offset_bottom = 24.0
-scale = Vector2(1.36, 1.36)
-flat = true
+offset_right = 130.0
+offset_bottom = 100.0
+scale = Vector2(0.5, 0.5)
+mouse_force_pass_scroll_events = false
+theme = ExtResource("2_5ky3x")
 icon_alignment = 1
 expand_icon = true
 
 [node name="controller_state" type="Label" parent="."]
 unique_name_in_owner = true
+visible = false
 layout_mode = 0
-offset_top = -116.0
 offset_right = 1280.0
-offset_bottom = 684.0
+offset_bottom = 800.0
 text = "Controller_state"
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="Left_Joy" type="Sprite2D" parent="controller_state"]
-unique_name_in_owner = true
-light_mask = 2
-visibility_layer = 2
-position = Vector2(320, 400)
-scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_t684b")
-
-[node name="Right_Joy" type="Sprite2D" parent="controller_state"]
-unique_name_in_owner = true
-position = Vector2(960, 400)
-scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_t684b")
-
-[node name="Left_Joy_tansparent" type="Sprite2D" parent="controller_state"]
-modulate = Color(1, 1, 1, 0.117647)
-position = Vector2(320, 400)
-scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_t684b")
-
-[node name="Right_Joy_transparent" type="Sprite2D" parent="controller_state"]
-modulate = Color(1, 1, 1, 0.117647)
-position = Vector2(960, 400)
-scale = Vector2(1.5, 1.5)
-texture = ExtResource("2_t684b")
 
 [node name="Network" type="Node" parent="."]
 script = ExtResource("3_ecrl6")
 
 [node name="Engine_slider" type="HSlider" parent="."]
 layout_mode = 0
-offset_left = 856.0
-offset_top = 135.0
-offset_right = 1066.0
-offset_bottom = 237.0
+offset_left = 119.0
+offset_top = 576.0
+offset_right = 329.0
+offset_bottom = 678.0
+scale = Vector2(1.5, 1.5)
+theme = ExtResource("2_5ky3x")
 scrollable = false
 
 [node name="Engine_label" type="Label" parent="Engine_slider"]
@@ -100,37 +97,41 @@ text = "Engine Speed =  0%
 [node name="Operate_button" type="Button" parent="."]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 300.0
-offset_top = 156.0
-offset_right = 372.0
-offset_bottom = 187.0
+offset_left = 582.0
+offset_top = 99.0
+offset_right = 721.0
+offset_bottom = 159.0
 theme_override_styles/normal = SubResource("StyleBoxFlat_e7bad")
-theme_override_styles/hover = SubResource("StyleBoxFlat_qarm4")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tdwtv")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_a0opp")
 toggle_mode = true
 action_mode = 0
 text = "Operate"
 
 [node name="Horn_button" type="Button" parent="."]
+clip_contents = true
 layout_mode = 0
-offset_left = 164.0
-offset_top = 76.0
-offset_right = 172.0
-offset_bottom = 84.0
+offset_left = 119.0
+offset_top = 68.0
+offset_right = 203.0
+offset_bottom = 152.0
 theme_override_constants/outline_size = 0
 theme_override_constants/icon_max_width = 0
+theme_override_styles/normal = SubResource("StyleBoxTexture_klgb6")
+theme_override_styles/hover = SubResource("StyleBoxTexture_2f5wj")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_q0ml2")
 action_mode = 0
-text = "Horn
-"
+expand_icon = true
 
 [node name="Stop_button" type="Button" parent="."]
 layout_mode = 0
-offset_left = 618.0
-offset_top = 180.0
-offset_right = 667.0
-offset_bottom = 211.0
+offset_left = 1104.0
+offset_top = 50.0
+offset_right = 1204.0
+offset_bottom = 99.0
+theme_override_styles/pressed = SubResource("StyleBoxFlat_4fhl4")
 toggle_mode = true
-text = "STOP"
+text = "E-STOP"
 
 [node name="ColorRect" type="ColorRect" parent="."]
 z_index = -2
@@ -142,6 +143,48 @@ scale = Vector2(0.998124, 1.00029)
 mouse_filter = 2
 color = Color(0.67069, 0.67069, 0.67069, 1)
 metadata/_edit_lock_ = true
+
+[node name="right_pad_mc" type="Sprite2D" parent="."]
+position = Vector2(960, 400)
+scale = Vector2(0.48, 0.48)
+texture = ExtResource("2_n7rny")
+
+[node name="Right_Joy" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(960, 405)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("4_2nj75")
+offset = Vector2(0, 15)
+
+[node name="Left_pad_mc" type="Sprite2D" parent="."]
+position = Vector2(320, 400)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("3_d4b4f")
+metadata/_edit_group_ = true
+
+[node name="Left_Joy" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+light_mask = 2
+visibility_layer = 2
+position = Vector2(319, 405)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("4_2nj75")
+offset = Vector2(0, 15)
+metadata/_edit_group_ = true
+
+[node name="Left_Joy_tansparent" type="Sprite2D" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0.117647)
+position = Vector2(320, 400)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_t684b")
+
+[node name="Right_Joy_transparent" type="Sprite2D" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0.117647)
+position = Vector2(961, 402)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_t684b")
 
 [connection signal="toggled" from="modeSwitch" to="." method="_on_mode_switch_toggled"]
 [connection signal="value_changed" from="Engine_slider" to="." method="_on_engine_slider_value_changed"]

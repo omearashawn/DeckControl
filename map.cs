@@ -1,5 +1,7 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 public partial class map : HttpRequest
 {
@@ -9,7 +11,14 @@ public partial class map : HttpRequest
 	double latitude = 46.84838198789008;
 	double longitude = -96.89891796403117;
 	string requestString = "";
-		public override void _Ready(){
+	int screenx = 1280;
+	int screeny = 800;
+	bool drawing = false;
+	public List<Vector2> polygon = new List<Vector2>();
+	Node poly_node;
+	public override void _Ready(){
+		poly_node = ResourceLoader.Load<PackedScene>("res://poly_node.tscn").Instantiate();
+		AddChild(poly_node);
 		updateString();
 		// Create an HTTP request node and connect its completion signal.
 		var httpRequest = GetNode<HttpRequest>(".");
@@ -24,7 +33,18 @@ public partial class map : HttpRequest
 		}
 	}
 	public void updateString(){
-		requestString = "https://maps.googleapis.com/maps/api/staticmap?center="+ latitude + ","+ longitude +"&zoom="+ zoom+"&size=1279x800&scale=1&maptype=satellite&key=AIzaSyChEEdeD5TdNNSUym-A1odT0Jn4M4durhw";
+		requestString = "https://maps.googleapis.com/maps/api/staticmap?center="+ latitude + ","+ longitude 
+		+"&zoom="+ zoom+"&size="+ screenx +"x"+screeny
+		+"&scale=1&maptype=satellite&key=AIzaSyChEEdeD5TdNNSUym-A1odT0Jn4M4durhw";
+	}
+
+	public void _on_draw_path_toggled(bool toogle){
+		drawing = toogle;
+	}
+	public double getGroundResolutionMeters(){
+		//returns in meters how many meters a pixel wide a pixel is at a lat. 
+		//ground resolution = cos(latitude * pi/180) * earth circumference / map width
+		return Math.Cos(latitude * (Math.PI / 180.0)) * (2.0 * Math.PI * 6378137.0) / (512 * Math.Pow(2, zoom));
 	}
 	public void getMap(){
 		updateString();
@@ -37,6 +57,9 @@ public partial class map : HttpRequest
 		{
 			GD.PushError("An error occurred in the HTTP request.");
 		}
+		double gr = getGroundResolutionMeters();
+		GD.Print("Ground Resolution is " + gr + "m ");
+		GD.Print("Area is: " + (gr * 1280) + "m x " + (gr * 800) + "m");
 	}
 	public void _on_home_pressed(){
 		zoom = 19;
@@ -76,11 +99,24 @@ public partial class map : HttpRequest
 		// moveScale += 0.5
 		getMap();
 	}
-	public override void _Process(double delta){
-	}
 
     public override void _Input(InputEvent inputEvent){
-		if(inputEvent.IsAction("map_up")){
+		if(inputEvent is InputEventMouseButton mouseButton && mouseButton.Pressed){
+			Vector2 click = mouseButton.Position;
+			getClickGPS(click);
+			if(drawing){
+				polygon.Add(click);
+				GD.Print("adding point: "+ click);
+				try{
+				poly_node.Call("setPoints", polygon.ToArray());
+				}catch{
+					GD.Print("error");
+					polygon.Clear();
+				}
+			}
+			return;
+		}
+		else if(inputEvent.IsAction("map_up")){
 			latitude += moveAmount * moveScale;
 		}
 		else if(inputEvent.IsAction("map_down")){
@@ -105,4 +141,41 @@ public partial class map : HttpRequest
 		}
 		getMap();
 	}
+
+    private void getClickGPS(Vector2 click)
+    {
+        GD.Print("Click at " + click[0] + ", " + click[1]);
+		double clickLat = (((double)click[0] - (screenx/2.0)) * getGroundResolutionMeters());
+		double clickLong = (((double)click[1] - (screeny/2.0)) * getGroundResolutionMeters());
+		PixelXYToLatLong((int)click[0], (int)click[1]);
+	}
+	public void PixelXYToLatLong(int pixelX, int pixelY)  
+        {  
+			LatLongToGlobalPixelXY(out int centerX, out int centerY);
+			pixelX = centerX - pixelX;
+			pixelY = centerY - pixelY;
+            double mapSize = MapSize();  
+            double x = (pixelX / mapSize) - 0.5;  
+            double y = 0.5 - (pixelY / mapSize);  
+  
+            double clickLatitude = 90 - 360 * Math.Atan(Math.Exp(-y * 2 * Math.PI)) / Math.PI;  
+            double clcikLongitude = 360 * x;  
+
+			GD.Print("Latitude: " + clickLatitude + " Longitude: " + clcikLongitude);
+        }
+	public void LatLongToGlobalPixelXY(out int pixelX, out int pixelY)  
+        {  
+            double x = (longitude + 180) / 360;   
+            double sinLatitude = Math.Sin(latitude * Math.PI / 180);  
+            double y = 0.5 - Math.Log((1 + sinLatitude) / (1 - sinLatitude)) / (4 * Math.PI);  
+  
+            int mapSize = MapSize();  
+            pixelX = (int) (x * mapSize + 0.5);  
+            pixelY = (int) (y * mapSize + 0.5);  
+        } 
+    private int MapSize()
+    {
+        return 512 << zoom;
+    }
+
 }

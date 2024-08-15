@@ -1,12 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://27by1td60mq3"]
+[gd_scene load_steps=3 format=3 uid="uid://27by1td60mq3"]
 
 [ext_resource type="Script" path="res://map.cs" id="1_l335u"]
+[ext_resource type="Texture2D" uid="uid://dq4tl3170rdxv" path="res://Assests/UI/mc_map_icon.png" id="2_81t2b"]
 
 [node name="mapNode" type="HTTPRequest"]
 script = ExtResource("1_l335u")
 
 [node name="mapRect" type="TextureRect" parent="."]
 unique_name_in_owner = true
+process_priority = 1
 anchors_preset = -1
 anchor_left = 0.128
 anchor_top = 0.627
@@ -45,6 +47,15 @@ offset_right = 1240.0
 offset_bottom = 57.0
 text = "HOME"
 
+[node name="draw_path" type="Button" parent="."]
+offset_left = 1199.0
+offset_top = 71.0
+offset_right = 1227.0
+offset_bottom = 99.0
+toggle_mode = true
+icon = ExtResource("2_81t2b")
+
 [connection signal="pressed" from="ZoomIn" to="." method="_on_zoom_in_pressed"]
 [connection signal="pressed" from="ZoomOut" to="." method="_on_zoom_out_pressed"]
 [connection signal="pressed" from="Home" to="." method="_on_home_pressed"]
+[connection signal="toggled" from="draw_path" to="." method="_on_draw_path_toggled"]

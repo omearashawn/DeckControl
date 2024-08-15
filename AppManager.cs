@@ -21,13 +21,9 @@ public partial class AppManager : Control
 	{
 		var controller_state = GetNode<Label>("controller_state");
 		controller_state.Text = controller_global.Instance.ToString();
-		controller_state.Show();
-		setUI(30);
+		// controller_state.Show();
+		setUI(75);
 	}
-    public override void _PhysicsProcess(double delta)
-    {
-       
-    }
     public void setUI(int scale){
 		var left_joy = GetNode<Sprite2D>("%Left_Joy");
 		var right_joy = GetNode<Sprite2D>("%Right_Joy");
@@ -65,6 +61,7 @@ public partial class AppManager : Control
 				return;
 				// GD.Print("Unmapped axis: " + joystick.AsText());
 			}
+			return;
 		}
 		else if(inputEvent is InputEventJoypadButton button){
 			if(button.IsAction("engine_crank")){
@@ -74,7 +71,7 @@ public partial class AppManager : Control
 	}
 	public void _on_engine_slider_value_changed(float value){
 		controller_global.Instance.engineSpeed = value/100;
-		GetNode<Label>("%Engine_label").Text = "Engine Speed = " + (controller_global.Instance.engineSpeed*100).ToString() + "%";
+		GetNode<Label>("%Engine_label").Text = "Engine Speed = " + ((int)(controller_global.Instance.engineSpeed*100)).ToString() + "%";
 	}
 	public void _on_option_button_toggled(bool state){
 		controller_global.Instance.operate = state;

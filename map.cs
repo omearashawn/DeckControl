@@ -112,6 +112,7 @@ public partial class map : HttpRequest
 				}catch{
 					GD.Print("error");
 					polygon.Clear();
+					poly_node.Call("setPoints", polygon.ToArray());
 				}
 			}
 			return;
@@ -142,6 +143,10 @@ public partial class map : HttpRequest
 		getMap();
 	}
 
+	public void _on_reset_pressed(){
+		polygon.Clear();
+		poly_node.Call("setPoints", polygon.ToArray());
+	}
     private void getClickGPS(Vector2 click)
     {
         GD.Print("Click at " + click[0] + ", " + click[1]);
